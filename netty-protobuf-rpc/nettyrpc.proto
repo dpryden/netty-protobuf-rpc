@@ -1,0 +1,80 @@
+// Copyright (c) 2009 Stephen Tu <stephen_tu@berkeley.edu>
+// Copyright (c) 2009 Shardul Deo
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+// This RPC Proto file is heavily inspired from:
+// http://code.google.com/p/protobuf-socket-rpc/source/browse/trunk/proto/rpc.proto
+
+option java_package = "com.googlecode.protobuf.netty";
+option java_outer_classname = "NettyRpcProto";
+
+// This is default, but it's nice to be explicit
+option optimize_for = SPEED;
+
+message RpcRequest {
+    // Sequence ID number, since Netty is asynchronious by nature
+    // We need this to implement callbacks. This ID number is only
+    // unique to a Netty Channel
+    // NOTE: leave the ID out if you don't want any response 
+    optional int32 id = 1;
+
+    required string service_name = 2;
+
+    required string method_name = 3;
+
+    required bool is_blocking_service = 4;
+
+    required bytes request_message = 5;
+}
+
+message RpcResponse {
+    // Request Sequence ID number that this response is
+    // "responding" to. This is *required* since we don't
+    // send back responses unless a sequence ID was provided
+    // (that would be extra traffic not necessary)
+    required int32 id = 1;
+
+    // This is optional, since we could be sending back an
+    // error response in which case we would not have a 
+    // response message
+    optional bytes response_message = 2;
+
+    optional ErrorCode error_code = 3;
+
+    optional string error_message = 4;
+}
+
+enum ErrorCode {
+
+  // Server-side errors
+  BAD_REQUEST_DATA = 0; // Server received bad request data
+  BAD_REQUEST_PROTO = 1; // Server received bad request proto
+  SERVICE_NOT_FOUND = 2; // Service not found on server
+  METHOD_NOT_FOUND = 3; // Method not found on server
+  RPC_ERROR = 4; // Rpc threw exception on server
+  RPC_FAILED = 5; // Rpc failed on server
+  
+  // Client-side errors (these are returned by the client-side code)
+  INVALID_REQUEST_PROTO = 6; // Rpc was called with invalid request proto
+  BAD_RESPONSE_PROTO = 7; // Server returned a bad response proto
+  UNKNOWN_HOST = 8; // Could not find supplied host
+  IO_ERROR = 9; // I/O error while communicating with server
+
+}
