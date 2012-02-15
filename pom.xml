@@ -4,7 +4,7 @@
     <groupId>com.github.dpryden</groupId>
     <artifactId>netty-protobuf-rpc</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <name>Netty Protobuf RPC Implementation</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
