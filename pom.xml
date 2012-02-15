@@ -1,16 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.dpryden</groupId>
-	<artifactId>netty-protobuf-rpc</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
-	<name>Netty Protobuf RPC Implementation</name>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.dpryden</groupId>
+    <artifactId>netty-protobuf-rpc</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.2-SNAPSHOT</version>
+    <name>Netty Protobuf RPC Implementation</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
@@ -18,23 +22,23 @@
             </plugin>
         </plugins>
     </build>
-	<dependencies>
-		<dependency>
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-			<version>2.2.0</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.2.0</version>
+        </dependency>
         <dependency>
             <groupId>org.jboss.netty</groupId>
             <artifactId>netty</artifactId>
             <version>3.1.5.GA</version>
         </dependency>
         <dependency>
-        	<groupId>apache-log4j</groupId>
-        	<artifactId>log4j</artifactId>
-        	<version>1.2.15</version>
+            <groupId>apache-log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.15</version>
         </dependency>
-	</dependencies>
+    </dependencies>
     <repositories>
         <repository>
             <id>jboss</id>
