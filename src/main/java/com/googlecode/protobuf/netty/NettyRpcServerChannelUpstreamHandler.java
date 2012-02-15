@@ -50,6 +50,8 @@ import com.googlecode.protobuf.netty.exception.NoSuchServiceException;
 import com.googlecode.protobuf.netty.exception.NoSuchServiceMethodException;
 import com.googlecode.protobuf.netty.exception.RpcException;
 import com.googlecode.protobuf.netty.exception.RpcServiceException;
+import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.group.ChannelGroup;
 
 @ChannelPipelineCoverage("all")
 class NettyRpcServerChannelUpstreamHandler extends SimpleChannelUpstreamHandler {
@@ -58,6 +60,19 @@ class NettyRpcServerChannelUpstreamHandler extends SimpleChannelUpstreamHandler 
 	
 	private final Map<String, Service> serviceMap = new ConcurrentHashMap<String, Service>();
 	private final Map<String, BlockingService> blockingServiceMap = new ConcurrentHashMap<String, BlockingService>();
+
+    private final ChannelGroup allChannels;
+
+    public NettyRpcServerChannelUpstreamHandler(ChannelGroup allChannels) {
+        this.allChannels = allChannels;
+    }
+
+    @Override
+    public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) {
+        // Add all open channels to the global group so that they are
+        // closed on shutdown.
+        allChannels.add(e.getChannel());
+    }
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {

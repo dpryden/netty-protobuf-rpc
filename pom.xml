@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf.netty</groupId>
 	<artifactId>netty-protobuf-rpc</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>Netty Protobuf RPC Implementation</name>
     <build>
         <plugins>

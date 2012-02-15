@@ -32,13 +32,16 @@ import org.jboss.netty.channel.ChannelUpstreamHandler;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
+import org.jboss.netty.channel.group.ChannelGroup;
+import org.jboss.netty.channel.group.DefaultChannelGroup;
 
 public class NettyRpcServer {
 
 	private static final Logger logger = Logger.getLogger(NettyRpcServer.class);
 	
 	private final ServerBootstrap bootstrap;
-	private final NettyRpcServerChannelUpstreamHandler handler = new NettyRpcServerChannelUpstreamHandler();
+    private final ChannelGroup allChannels = new DefaultChannelGroup();
+	private final NettyRpcServerChannelUpstreamHandler handler = new NettyRpcServerChannelUpstreamHandler(allChannels);
 	private final ChannelUpstreamHandlerFactory handlerFactory = new ChannelUpstreamHandlerFactory() {
 		public ChannelUpstreamHandler getChannelUpstreamHandler() {
 			return handler;
@@ -79,5 +82,9 @@ public class NettyRpcServer {
 		logger.info("Serving on: " + sa);
 		bootstrap.bind(sa);
 	}
-	
+
+    public void shutdown() {
+        allChannels.close().awaitUninterruptibly();
+        bootstrap.releaseExternalResources();
+    }
 }
