@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,26 +32,28 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import com.google.protobuf.Message;
 
 class NettyRpcPipelineFactory implements ChannelPipelineFactory {
-	
+
 	private final ChannelUpstreamHandlerFactory handlerFactory;
 	private final Message defaultInstance;
-	
+
 	NettyRpcPipelineFactory(ChannelUpstreamHandlerFactory handlerFactory, Message defaultInstance) {
 		this.handlerFactory = handlerFactory;
 		this.defaultInstance = defaultInstance;
 	}
-	
+
 	public ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline p = Channels.pipeline();
 		p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(MAX_FRAME_BYTES_LENGTH, 0, 4, 0, 4));
 		p.addLast("protobufDecoder", new ProtobufDecoder(defaultInstance));
-		  
+
 		p.addLast("frameEncoder", new LengthFieldPrepender(4));
 		p.addLast("protobufEncoder", new ProtobufEncoder());
-		
-		p.addLast("handler", handlerFactory.getChannelUpstreamHandler()); 
+
+		p.addLast("handler", handlerFactory.getChannelUpstreamHandler());
 		return p;
 	}
-	
-	private static final int MAX_FRAME_BYTES_LENGTH = 1048576;
+
+    // Since Netty 3.2.7.Final, it's safe to use Integer.MAX_VALUE
+    // For more information see: http://stackoverflow.com/questions/8065022/how-to-use-unlimited-frame-sizes-in-jboss-netty-without-wasting-memory
+	private static final int MAX_FRAME_BYTES_LENGTH = Integer.MAX_VALUE;
 }
