@@ -4,7 +4,7 @@
     <groupId>com.github.dpryden</groupId>
     <artifactId>netty-protobuf-rpc</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <name>Netty Protobuf RPC Implementation</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,9 +29,9 @@
             <version>2.2.0</version>
         </dependency>
         <dependency>
-            <groupId>org.jboss.netty</groupId>
+            <groupId>io.netty</groupId>
             <artifactId>netty</artifactId>
-            <version>3.2.7.Final</version>
+            <version>3.3.1.Final</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
